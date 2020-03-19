@@ -1,29 +1,41 @@
 import React from 'react';
 import './App.css';
 
+const testApi = 'https://pokeapi.co/api/v2/pokemon/'
+
 class App extends React.Component {
   constructor () {
     super()
     this.state = {
-      apiurl: 'https://pokeapi.co/api/v2/pokemon/',
+      apiurl: '',
       restMethod: 'get',
-      results: 'This is where the results of the api call go'
+      results: ''
     }
   }
+
+  test = async () => {
+    const raw = await fetch(testApi);
+    const data = await raw.json();
+    console.log('raw',raw);
+    console.log('data',data);
+  }
+
   makeAPICall = async () => {
-    const raw = await fetch(this.state.apiurl);
+    const raw = await fetch(`${this.state.apiurl}`);
     const data = await raw.json();
     this.setState({
-      results: data.results
+      results: data
     })
   }
+
   handleChange = e => {
     this.setState({
       apiurl: e.target.value
     })
   }
 
-render () {
+  render () {
+    // this.test()
     return (
       <div className="App">
         <header className="App-header">
@@ -36,7 +48,14 @@ render () {
                 <span>GET</span><span>POST</span><span>PUT</span><span>DELETE</span>
                 <button onClick={this.makeAPICall}>Go!</button>
               </div>
-              <article className="results"></article>
+              <article className="results">results: 
+                <div>
+                  {this.state.results.length
+                    ? this.state.results
+                    : 'null'
+                  }
+                </div>
+              </article>
             </form>
           </div>
         <footer>
